@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Manpower OCR</h2>
+
+  <input type="file" id="file">
+  <button onclick="send()">Yükle</button>
+  <p id="result"></p>
+
+  <hr>
+
+  <input type="date" id="d">
+  <button onclick="rep()">Rapor</button>
+  <pre id="r"></pre>
+
+<script>
+function send(){
+  let f = document.getElementById("file").files[0];
+  let fd = new FormData();
+  fd.append("file", f);
+
+  fetch("http://SUNUCU_IP:8000/upload", {
+    method: "POST",
+    body: fd
+  }).then(r=>r.json()).then(j=>{
+    document.getElementById("result").innerText = "OK: " + j.count;
+  });
+}
+
+function rep(){
+  let d = document.getElementById("d").value;
+  fetch("http://SUNUCU_IP:8000/report?date="+d)
+  .then(r=>r.json())
+  .then(j=>{
+    document.getElementById("r").innerText = JSON.stringify(j,null,2);
+  });
+}
+</script>
+</body>
+</html>
